@@ -61,6 +61,7 @@ const likeRoutes = require('./routes/likeRoutes');
 const userRoutes = require('./routes/userRoutes');
 const friendRoutes = require('./routes/friendRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const newsRoutes = require('./routes/newsRoutes');
 
 // Use routes
 app.use('/api/auth', authRoutes);
@@ -71,6 +72,7 @@ app.use('/api/comments', commentRouter);     // /api/comments/:id (delete)
 app.use('/api/users', userRoutes);           // User profiles + search
 app.use('/api/friends', friendRoutes);       // Friend requests + friends list
 app.use('/api/notifications', notificationRoutes); // Notifications
+app.use('/api/news', newsRoutes);               // News feed
 
 // Health check route
 app.get('/api/health', (req, res) => {

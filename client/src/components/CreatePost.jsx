@@ -102,7 +102,7 @@ const CreatePost = ({ onPostCreated }) => {
       <Paper elevation={1} sx={{ p: 2, mb: 3, borderRadius: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Avatar
-            src={user?.avatar || undefined}
+            src={user?.avatar ? `http://localhost:5000${user.avatar}` : undefined}
             sx={{ bgcolor: '#1877F2' }}
           >
             {user?.name?.charAt(0).toUpperCase()}
@@ -133,7 +133,7 @@ const CreatePost = ({ onPostCreated }) => {
 
           {/* User info + text area */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-            <Avatar src={user?.avatar || undefined} sx={{ bgcolor: '#1877F2' }}>
+            <Avatar src={user?.avatar ? `http://localhost:5000${user.avatar}` : undefined} sx={{ bgcolor: '#1877F2' }}>
               {user?.name?.charAt(0).toUpperCase()}
             </Avatar>
             <Typography variant="subtitle2">{user?.name}</Typography>

@@ -88,7 +88,7 @@ const Register = () => {
             gutterBottom
             sx={{ color: '#1877F2', fontWeight: 'bold', textAlign: 'center' }}
           >
-            Facebook Clone
+            GaDone's Hut
           </Typography>
           <Typography
             variant="body1"

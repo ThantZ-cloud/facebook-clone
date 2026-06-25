@@ -1,50 +1,23 @@
-import { Box, Typography, Avatar, List, ListItemButton, ListItemAvatar, ListItemText, Divider, IconButton } from '@mui/material';
+import { Box, Typography, Avatar, CircularProgress } from '@mui/material';
 import {
-  PersonAdd as PersonAddIcon,
-  Favorite as LikeIcon,
-  Comment as CommentIcon,
-  CheckCircle as AcceptedIcon,
-  Notifications as NotificationsIcon,
-  DoneAll as MarkAllReadIcon,
+  Article as NewsIcon,
+  OpenInNew as ExternalLinkIcon,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import useNotifications from '../hooks/useNotifications';
+import useNews from '../hooks/useNews';
 
-// Get icon for notification type
-const getNotificationIcon = (type) => {
-  switch (type) {
-    case 'FRIEND_REQUEST':
-      return <PersonAddIcon sx={{ fontSize: 14 }} />;
-    case 'FRIEND_REQUEST_ACCEPTED':
-      return <AcceptedIcon sx={{ fontSize: 14 }} />;
-    case 'POST_LIKE':
-      return <LikeIcon sx={{ fontSize: 14 }} />;
-    case 'POST_COMMENT':
-      return <CommentIcon sx={{ fontSize: 14 }} />;
-    default:
-      return <NotificationsIcon sx={{ fontSize: 14 }} />;
-  }
+// Truncate text to 3 sentences
+const truncateToSentences = (text, maxSentences = 3) => {
+  if (!text) return '';
+  // Split by sentence endings
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+  const truncated = sentences.slice(0, maxSentences).join(' ').trim();
+  // Add ellipsis if we cut it short
+  return sentences.length > maxSentences ? truncated + '...' : truncated;
 };
 
-// Generate notification message
-const getNotificationMessage = (notification) => {
-  const name = notification.actor?.name || 'Someone';
-  switch (notification.type) {
-    case 'FRIEND_REQUEST':
-      return `${name} sent you a friend request`;
-    case 'FRIEND_REQUEST_ACCEPTED':
-      return `${name} accepted your friend request`;
-    case 'POST_LIKE':
-      return `${name} liked your post`;
-    case 'POST_COMMENT':
-      return `${name} commented on your post`;
-    default:
-      return `${name} interacted with your content`;
-  }
-};
-
-// Format time
-const formatTime = (dateString) => {
+// Format time ago
+const formatTimeAgo = (dateString) => {
+  if (!dateString) return '';
   const date = new Date(dateString);
   const now = new Date();
   const diffMs = now - date;
@@ -53,33 +26,19 @@ const formatTime = (dateString) => {
   const diffDays = Math.floor(diffMs / 86400000);
 
   if (diffMins < 1) return 'Just now';
-  if (diffMins < 60) return `${diffMins}m`;
-  if (diffHours < 24) return `${diffHours}h`;
-  if (diffDays < 7) return `${diffDays}d`;
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
   return date.toLocaleDateString();
 };
 
 const LeftSidebar = () => {
-  const navigate = useNavigate();
-  const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+  const { news, loading, error } = useNews();
 
-  // Handle clicking on a notification
-  const handleClick = async (notification) => {
-    if (!notification.read) {
-      await markAsRead(notification.id);
-    }
-
-    switch (notification.type) {
-      case 'FRIEND_REQUEST':
-      case 'FRIEND_REQUEST_ACCEPTED':
-        navigate('/friends');
-        break;
-      case 'POST_LIKE':
-      case 'POST_COMMENT':
-        navigate('/');
-        break;
-      default:
-        navigate('/');
+  // Handle clicking a news item — open original article in new tab
+  const handleClick = (url) => {
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -96,80 +55,136 @@ const LeftSidebar = () => {
       }}
     >
       {/* Header */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 2, mb: 1 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 2, mb: 1.5 }}>
+        <NewsIcon sx={{ fontSize: 20, color: '#1877F2' }} />
         <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-          Notifications
+          News
         </Typography>
-        {unreadCount > 0 && (
-          <IconButton size="small" onClick={markAllAsRead} title="Mark all as read">
-            <MarkAllReadIcon sx={{ fontSize: 18 }} />
-          </IconButton>
-        )}
       </Box>
 
-      {/* Notification list */}
-      {notifications.length === 0 ? (
-        <Box sx={{ px: 2, py: 4, textAlign: 'center' }}>
-          <NotificationsIcon sx={{ fontSize: 40, color: '#BCC0C4', mb: 1 }} />
+      {/* Loading state */}
+      {loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+          <CircularProgress size={28} />
+        </Box>
+      )}
+
+      {/* Error state */}
+      {error && (
+        <Box sx={{ px: 2, py: 3, textAlign: 'center' }}>
           <Typography variant="body2" color="text.secondary">
-            No notifications yet
+            {error}
           </Typography>
         </Box>
-      ) : (
-        <List disablePadding sx={{ px: 0.5 }}>
-          {notifications.map((notif) => (
-            <ListItemButton
-              key={notif.id}
-              onClick={() => handleClick(notif)}
+      )}
+
+      {/* News list */}
+      {!loading && !error && news.length === 0 && (
+        <Box sx={{ px: 2, py: 3, textAlign: 'center' }}>
+          <NewsIcon sx={{ fontSize: 40, color: '#BCC0C4', mb: 1 }} />
+          <Typography variant="body2" color="text.secondary">
+            No news available
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Add your GNews API key to see news here
+          </Typography>
+        </Box>
+      )}
+
+      {!loading && news.length > 0 && (
+        <Box>
+          {news.map((article, index) => (
+            <Box
+              key={index}
+              onClick={() => handleClick(article.url)}
               sx={{
-                borderRadius: 2,
-                mb: 0.3,
-                bgcolor: notif.read ? 'transparent' : '#F0F8FF',
+                display: 'flex',
+                gap: 1.5,
+                px: 2,
+                py: 1.5,
+                cursor: 'pointer',
+                // Bottom border/underline between items
+                borderBottom: '1px solid #E4E6EB',
                 '&:hover': { bgcolor: '#F0F2F5' },
+                '&:last-child': { borderBottom: 'none' },
               }}
             >
-              <ListItemAvatar sx={{ minWidth: 44 }}>
-                <Box sx={{ position: 'relative' }}>
-                  <Avatar
-                    src={notif.actor?.avatar ? `http://localhost:5000${notif.actor.avatar}` : undefined}
-                    sx={{ width: 36, height: 36, bgcolor: '#1877F2' }}
-                  >
-                    {notif.actor?.name?.charAt(0).toUpperCase()}
-                  </Avatar>
-                  {/* Type icon badge */}
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      bottom: -2,
-                      right: -2,
-                      bgcolor: '#1877F2',
-                      borderRadius: '50%',
-                      width: 18,
-                      height: 18,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      border: '2px solid white',
+              {/* Thumbnail */}
+              {article.image && (
+                <Box
+                  sx={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: 1.5,
+                    overflow: 'hidden',
+                    flexShrink: 0,
+                  }}
+                >
+                  <img
+                    src={article.image}
+                    alt=""
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
                     }}
-                  >
-                    {getNotificationIcon(notif.type)}
-                  </Box>
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
                 </Box>
-              </ListItemAvatar>
-              <ListItemText
-                primary={getNotificationMessage(notif)}
-                secondary={formatTime(notif.createdAt)}
-                primaryTypographyProps={{
-                  fontSize: '0.82rem',
-                  fontWeight: notif.read ? 400 : 600,
-                  lineHeight: 1.3,
-                }}
-                secondaryTypographyProps={{ fontSize: '0.7rem' }}
-              />
-            </ListItemButton>
+              )}
+
+              {/* Text content */}
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                {/* Title */}
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: '0.82rem',
+                    lineHeight: 1.3,
+                    mb: 0.5,
+                    // Limit to 2 lines
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {article.title}
+                </Typography>
+
+                {/* 3-sentence preview */}
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{
+                    fontSize: '0.75rem',
+                    lineHeight: 1.4,
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {truncateToSentences(article.description, 3)}
+                </Typography>
+
+                {/* Source + time */}
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5 }}>
+                  <Typography variant="caption" sx={{ fontSize: '0.7rem', color: '#65676B' }}>
+                    {article.source?.name || 'Unknown'}
+                  </Typography>
+                  <Typography variant="caption" sx={{ fontSize: '0.7rem', color: '#BCC0C4' }}>
+                    ·
+                  </Typography>
+                  <Typography variant="caption" sx={{ fontSize: '0.7rem', color: '#65676B' }}>
+                    {formatTimeAgo(article.publishedAt)}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
           ))}
-        </List>
+        </Box>
       )}
 
       {/* Footer */}

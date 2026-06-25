@@ -1,8 +1,8 @@
-# Facebook Clone — Project Specification
+# GaDone's Hut — Project Specification
 
 ## Overview
 
-A simple Facebook clone with core social media features including news feed, user profiles, posts, comments, stories, friend system, and direct messaging.
+A social media app with core features including news feed, user profiles, posts, comments, stories, friend system, and direct messaging.
 
 **Version:** 1.0 (MVP)
 **Date:** 2026-06-24

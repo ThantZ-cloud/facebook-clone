@@ -1,6 +1,6 @@
-# Facebook Clone
+# GaDone's Hut
 
-A full-stack Facebook clone built with React, Express, Prisma, and Socket.io.
+A full-stack social media app built with React, Express, Prisma, and Socket.io.
 
 ## 🚀 Features
 

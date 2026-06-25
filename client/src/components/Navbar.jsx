@@ -183,7 +183,7 @@ const Navbar = () => {
         {/* LEFT SECTION — Logo + Search */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 280 }}>
           <Typography
-            variant="h4"
+            variant="h6"
             component="div"
             sx={{
               fontWeight: 'bold',
@@ -191,10 +191,12 @@ const Navbar = () => {
               cursor: 'pointer',
               fontFamily: 'Klavika, Segoe UI, Helvetica, Arial, sans-serif',
               lineHeight: 1,
+              whiteSpace: 'nowrap',
+              mr: 1,
             }}
             onClick={() => navigate('/')}
           >
-            f
+            GaDone's Hut
           </Typography>
 
           <ClickAwayListener onClickAway={handleClickAway}>
@@ -213,7 +215,7 @@ const Navbar = () => {
               >
                 <SearchIcon sx={{ color: '#65676B', fontSize: 20, mr: 1 }} />
                 <InputBase
-                  placeholder="Search Facebook"
+                  placeholder="Search GaDone's Hut"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => searchResults.length > 0 && setShowResults(true)}

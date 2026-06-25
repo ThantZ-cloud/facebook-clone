@@ -1,8 +1,8 @@
-# Facebook Clone — Project Instructions for Claude
+# GaDone's Hut — Project Instructions for Claude
 
 ## Project Overview
 
-A full-stack Facebook clone built as a learning project. The goal is to understand how real-world social media apps work — React on the frontend, Express + Prisma on the backend, SQLite for the database.
+A full-stack social media app built as a learning project. The goal is to understand how real-world social media apps work — React on the frontend, Express + Prisma on the backend, SQLite for the database.
 
 **Status:** Phase 1 (Auth) and Phase 2 (Posts, Comments, Likes) are complete. Next up is Phase 3 (Friends system).
 
