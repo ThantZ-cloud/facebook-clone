@@ -10,6 +10,7 @@ import {
   PersonRemove as PersonRemoveIcon,
   PersonAdd as PersonAddIcon,
   Search as SearchIcon,
+  ArrowBack as ArrowBackIcon,
 } from '@mui/icons-material';
 import Navbar from '../components/Navbar';
 import api from '../services/api';
@@ -124,7 +125,23 @@ const Friends = () => {
     <Box sx={{ minHeight: '100vh', bgcolor: '#F0F2F5' }}>
       <Navbar />
 
-      <Box sx={{ maxWidth: 900, mx: 'auto', px: 2, py: 3 }}>
+      {/* Back button */}
+      <Box sx={{ maxWidth: 900, mx: 'auto', px: 2, pt: 2 }}>
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate('/')}
+          sx={{
+            color: '#65676B',
+            textTransform: 'none',
+            fontWeight: 600,
+            '&:hover': { bgcolor: '#F0F2F5' },
+          }}
+        >
+          Back to Home
+        </Button>
+      </Box>
+
+      <Box sx={{ maxWidth: 900, mx: 'auto', px: 2, py: 0 }}>
         <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
           Friends
         </Typography>

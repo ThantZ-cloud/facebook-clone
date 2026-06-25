@@ -8,6 +8,7 @@ import {
   PersonAdd as PersonAddIcon,
   PersonRemove as PersonRemoveIcon,
   Check as CheckIcon,
+  ArrowBack as ArrowBackIcon,
 } from '@mui/icons-material';
 import Navbar from '../components/Navbar';
 import PostCard from '../components/PostCard';
@@ -140,6 +141,22 @@ const Profile = () => {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#F0F2F5' }}>
       <Navbar />
+
+      {/* Back button */}
+      <Box sx={{ maxWidth: 900, mx: 'auto', px: 2, pt: 2 }}>
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate('/')}
+          sx={{
+            color: '#65676B',
+            textTransform: 'none',
+            fontWeight: 600,
+            '&:hover': { bgcolor: '#F0F2F5' },
+          }}
+        >
+          Back to Home
+        </Button>
+      </Box>
 
       {/* Cover Photo */}
       <Box

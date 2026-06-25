@@ -34,6 +34,8 @@ model User {
   conversationsA    Conversation[]  @relation("conversationA")
   conversationsB    Conversation[]  @relation("conversationB")
   sentMessages      Message[]       @relation("sentMessages")
+  sentNotifications     Notification[] @relation("sentNotifications")
+  receivedNotifications Notification[] @relation("receivedNotifications")
 }
 
 // Post model
@@ -137,4 +139,19 @@ model Message {
   sender         User         @relation("sentMessages", fields: [senderId], references: [id])
   conversationId Int
   conversation   Conversation @relation(fields: [conversationId], references: [id])
+}
+
+// Notification model
+model Notification {
+  id            Int      @id @default(autoincrement())
+  type          String   // FRIEND_REQUEST, FRIEND_REQUEST_ACCEPTED, POST_LIKE, POST_COMMENT
+  actorId       Int      // Who performed the action
+  recipientId   Int      // Who receives the notification
+  referenceId   Int      // ID of the related entity (friendRequest.id, postId, commentId)
+  referenceType String   // "FriendRequest", "Post", "Comment"
+  read          Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  actor     User @relation("sentNotifications", fields: [actorId], references: [id])
+  recipient User @relation("receivedNotifications", fields: [recipientId], references: [id])
 }

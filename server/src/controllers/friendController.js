@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { createNotification } = require('../utils/createNotification');
 
 const prisma = new PrismaClient();
 
@@ -82,6 +83,9 @@ const sendRequest = async (req, res) => {
       data: { senderId, receiverId }
     });
 
+    // Notify the receiver
+    await createNotification('FRIEND_REQUEST', senderId, receiverId, friendRequest.id, 'FriendRequest');
+
     res.status(201).json({
       success: true,
       data: friendRequest
@@ -153,6 +157,9 @@ const respondToRequest = async (req, res) => {
           }
         })
       ]);
+
+      // Notify the original sender that their request was accepted
+      await createNotification('FRIEND_REQUEST_ACCEPTED', userId, friendRequest.senderId, friendRequest.id, 'FriendRequest');
 
       return res.json({
         success: true,

@@ -25,7 +25,22 @@ const io = new Server(server, {
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = [
+      process.env.CLIENT_URL || 'http://localhost:5173',
+      'http://localhost:5173',
+      'http://localhost:5174',
+    ];
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
@@ -45,6 +60,7 @@ const { postCommentRouter, commentRouter } = require('./routes/commentRoutes');
 const likeRoutes = require('./routes/likeRoutes');
 const userRoutes = require('./routes/userRoutes');
 const friendRoutes = require('./routes/friendRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 
 // Use routes
 app.use('/api/auth', authRoutes);
@@ -54,6 +70,7 @@ app.use('/api/posts', likeRoutes);           // /api/posts/:postId/like
 app.use('/api/comments', commentRouter);     // /api/comments/:id (delete)
 app.use('/api/users', userRoutes);           // User profiles + search
 app.use('/api/friends', friendRoutes);       // Friend requests + friends list
+app.use('/api/notifications', notificationRoutes); // Notifications
 
 // Health check route
 app.get('/api/health', (req, res) => {

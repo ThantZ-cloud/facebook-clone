@@ -7,8 +7,7 @@ import {
 import {
   Search as SearchIcon,
   MoreHoriz as MoreIcon,
-  Person as PersonIcon,
-  Chat as ChatIcon,
+  PersonAdd as PersonAddIcon,
 } from '@mui/icons-material';
 import api from '../services/api';
 
@@ -73,8 +72,8 @@ const RightSidebar = () => {
               }}
             >
               <MenuItem onClick={() => { setAnchorEl(null); navigate('/friends'); }}>
-                <ListItemIcon><PersonIcon fontSize="small" /></ListItemIcon>
-                View All Friends
+                <ListItemIcon><PersonAddIcon fontSize="small" /></ListItemIcon>
+                View Friend Requests
               </MenuItem>
             </Menu>
           </Box>

@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { createNotification } = require('../utils/createNotification');
 
 const prisma = new PrismaClient();
 
@@ -94,6 +95,9 @@ const addComment = async (req, res) => {
         }
       }
     });
+
+    // Notify the post author (but not if you commented on your own post)
+    await createNotification('POST_COMMENT', req.user.id, post.userId, comment.id, 'Comment');
 
     res.status(201).json({
       success: true,

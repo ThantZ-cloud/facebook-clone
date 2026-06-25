@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { createNotification } = require('../utils/createNotification');
 
 const prisma = new PrismaClient();
 
@@ -49,6 +50,9 @@ const toggleLike = async (req, res) => {
         }
       });
       liked = true;
+
+      // Notify the post author (but not if you liked your own post)
+      await createNotification('POST_LIKE', userId, post.userId, postId, 'Post');
     }
 
     // Get updated like count
