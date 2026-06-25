@@ -7,10 +7,10 @@ A full-stack social media app built with React, Express, Prisma, and Socket.io.
 - **Authentication** — Register/Login with JWT
 - **Posts** — Create, view, like posts with images
 - **Comments** — Comment on posts
-- **Stories** — 24-hour expiring stories
-- **Friends** — Send/accept friend requests
-- **Messaging** — Real-time chat with Socket.io
-- **Profiles** — User profiles with avatars
+- **Friends** — Send/accept friend requests, manage friend list
+- **Notifications** — Real-time alerts for friend requests, likes, comments
+- **Profiles** — User profiles with avatars, bio, cover photo
+- **News Feed** — GNews API integration for tech/AI/Myanmar news (coming soon)
 
 ## 🛠️ Tech Stack
 
@@ -25,25 +25,26 @@ A full-stack social media app built with React, Express, Prisma, and Socket.io.
 ## 📁 Project Structure
 
 ```
+├── .claude/                # Claude Code configuration
+│   ├── agents/             # Subagent definitions
+│   └── skills/             # Skill templates
+│
 ├── client/                 # React frontend
-│   ├── src/
-│   │   ├── components/     # UI components
-│   │   ├── pages/          # Page components
-│   │   ├── context/        # React Context
-│   │   └── services/       # API calls
-│   └── package.json
+│   └── src/
+│       ├── components/     # UI components
+│       ├── pages/          # Page components
+│       ├── context/        # React Context
+│       ├── hooks/          # Custom hooks
+│       └── services/       # API calls
 │
 ├── server/                 # Express backend
 │   ├── prisma/             # Database schema
-│   ├── src/
-│   │   ├── controllers/    # Route handlers
-│   │   ├── routes/         # API routes
-│   │   ├── middleware/      # Auth, uploads
-│   │   └── socket/         # Socket.io
-│   └── package.json
-│
-├── agents/                 # Sub-agent definitions
-└── skills/                 # Skill templates
+│   └── src/
+│       ├── controllers/    # Route handlers
+│       ├── routes/         # API routes
+│       ├── middleware/      # Auth, uploads
+│       ├── utils/          # Helpers
+│       └── socket/         # Socket.io (Phase 5)
 ```
 
 ## ⚡ Quick Start

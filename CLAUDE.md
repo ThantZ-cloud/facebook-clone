@@ -4,7 +4,7 @@
 
 A full-stack social media app built as a learning project. The goal is to understand how real-world social media apps work — React on the frontend, Express + Prisma on the backend, SQLite for the database.
 
-**Status:** Phase 1 (Auth) and Phase 2 (Posts, Comments, Likes) are complete. Next up is Phase 3 (Friends system).
+**Status:** Phases 1-4 complete (Auth, Posts, Friends, Notifications). Next up is Phase 5 (Messenger with Socket.io).
 
 ## Tech Stack
 
@@ -19,11 +19,16 @@ A full-stack social media app built as a learning project. The goal is to unders
 ## Project Structure
 
 ```
+├── .claude/                # Claude Code configuration
+│   ├── agents/             # Custom subagent types (code-reviewer, etc.)
+│   └── skills/             # Skills (feature-dev, debugging, update-docs, etc.)
+│
 ├── client/                 # React frontend
 │   └── src/
 │       ├── components/     # Reusable UI components (Navbar, PostCard, etc.)
 │       ├── pages/          # Page-level components (Home, Login, Register)
 │       ├── context/        # React Context (AuthContext)
+│       ├── hooks/          # Custom hooks (useNotifications, useNews)
 │       └── services/       # API calls (api.js)
 │
 ├── server/                 # Express backend
@@ -34,6 +39,7 @@ A full-stack social media app built as a learning project. The goal is to unders
 │       ├── controllers/    # Business logic (one per resource)
 │       ├── routes/         # Express routes (one per resource)
 │       ├── middleware/      # auth.js (JWT verify), upload.js (Multer)
+│       ├── utils/          # Helpers (createNotification.js)
 │       └── socket/         # Socket.io handlers (Phase 5)
 │
 └── SPEC.md                 # Full project specification
@@ -65,6 +71,16 @@ A full-stack social media app built as a learning project. The goal is to unders
 - Images are stored in `server/uploads/`
 - Use `upload.single('image')` middleware for single file uploads
 - Serve static files via `express.static('uploads')`
+
+### Notifications
+- Use `createNotification()` utility (`server/src/utils/createNotification.js`)
+- Trigger on: friend requests, likes, comments
+- Frontend uses `useNotifications` hook with 30-second polling
+- When building Messenger, must upgrade to Socket.io
+
+### Custom Hooks
+- `useNotifications` — polls `/api/notifications` every 30 seconds
+- `useNews` — fetches from `/api/news` (GNews API, 10-min cache)
 
 ## Common Commands
 

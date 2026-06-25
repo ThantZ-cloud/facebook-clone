@@ -385,15 +385,26 @@ facebook-clone/
 - [x] Comments system
 - [x] Like functionality
 
-### Phase 3: Social Features (Week 3-4)
-- [ ] Friend request system
-- [ ] Friends list
-- [ ] News feed (friends' posts only)
+### Phase 3: Social Features (Week 3-4) ✅
+- [x] Friend request system (send, accept, reject)
+- [x] Friends list with search
+- [x] Profile page with cover photo, avatar, bio
+- [x] Edit profile modal
+- [x] 3-column Facebook-style layout
+- [x] Custom MUI theme
 
-### Phase 4: Stories (Week 4-5)
-- [ ] Story creation (image upload)
-- [ ] Story viewer
-- [ ] Auto-expiration (24h)
+### Phase 4: Notifications ✅
+- [x] Notification model (type, actor, recipient, reference)
+- [x] `createNotification()` utility
+- [x] Trigger on friend requests, likes, comments
+- [x] Polling-based updates (30-second interval)
+- [x] Notification dropdown in navbar
+- [x] Mark as read / Mark all as read
+
+### Phase 4.5: News Feed (Paused)
+- [ ] GNews API integration (backend done)
+- [ ] News sidebar in left column (frontend done)
+- [ ] Full news viewer with images/video
 
 ### Phase 5: Messaging (Week 5-6)
 - [ ] Conversation model + API
