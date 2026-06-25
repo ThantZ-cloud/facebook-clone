@@ -379,11 +379,11 @@ facebook-clone/
 - [x] Database schema + migrations
 - [x] Register/Login with JWT
 
-### Phase 2: Core Features (Week 2-3)
-- [ ] Create/display posts
-- [ ] Image upload
-- [ ] Comments system
-- [ ] Like functionality
+### Phase 2: Core Features (Week 2-3) ✅
+- [x] Create/display posts
+- [x] Image upload
+- [x] Comments system
+- [x] Like functionality
 
 ### Phase 3: Social Features (Week 3-4)
 - [ ] Friend request system
