@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Container, Box, CircularProgress, Typography, Alert } from '@mui/material';
+import { Box, CircularProgress, Typography, Alert } from '@mui/material';
 import Navbar from '../components/Navbar';
+import LeftSidebar from '../components/LeftSidebar';
+import RightSidebar from '../components/RightSidebar';
 import CreatePost from '../components/CreatePost';
 import PostCard from '../components/PostCard';
 import api from '../services/api';
@@ -29,55 +31,98 @@ const Home = () => {
 
   // Called when a new post is created (from CreatePost component)
   const handlePostCreated = (newPost) => {
-    // Add the new post to the top of the list
     setPosts([newPost, ...posts]);
   };
 
   // Called when a post is deleted (from PostCard component)
   const handlePostDeleted = (postId) => {
-    // Remove the deleted post from the list
     setPosts(posts.filter(p => p.id !== postId));
   };
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#F0F2F5' }}>
-      {/* Top navigation bar */}
+      {/* Top navigation bar — full width */}
       <Navbar />
 
-      {/* Main content area */}
-      <Container maxWidth="sm" sx={{ pt: 3, pb: 4 }}>
-        {/* Create post form */}
-        <CreatePost onPostCreated={handlePostCreated} />
+      {/* 3-Column Layout */}
+      <Box
+        sx={{
+          display: 'flex',
+          // Align to the left instead of center
+          justifyContent: 'flex-start',
+        }}
+      >
+        {/* LEFT SIDEBAR — visible on medium+ screens */}
+        <Box
+          sx={{
+            // Hide on small screens
+            display: { xs: 'none', md: 'block' },
+            width: 280,
+            flexShrink: 0,
+            pl: 2,
+          }}
+        >
+          <LeftSidebar />
+        </Box>
 
-        {/* Error message */}
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        {/* CENTER — News Feed (this is the flexible middle column) */}
+        <Box
+          sx={{
+            width: '100%',
+            maxWidth: 780,    // Wider post area for better readability
+            px: { xs: 1, sm: 2 },
+            pt: 3,
+            pb: 4,
+            // Fill remaining space between sidebars
+            flex: 1,
+          }}
+        >
+          {/* Create post form */}
+          <CreatePost onPostCreated={handlePostCreated} />
 
-        {/* Loading spinner */}
-        {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-            <CircularProgress />
-          </Box>
-        ) : posts.length === 0 ? (
-          /* Empty state — no posts yet */
-          <Box sx={{ textAlign: 'center', py: 4 }}>
-            <Typography variant="h6" color="text.secondary">
-              No posts yet
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Be the first to share something!
-            </Typography>
-          </Box>
-        ) : (
-          /* List of posts */
-          posts.map(post => (
-            <PostCard
-              key={post.id}
-              post={post}
-              onDelete={handlePostDeleted}
-            />
-          ))
-        )}
-      </Container>
+          {/* Error message */}
+          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
+          {/* Loading spinner */}
+          {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+              <CircularProgress />
+            </Box>
+          ) : posts.length === 0 ? (
+            /* Empty state — no posts yet */
+            <Box sx={{ textAlign: 'center', py: 4 }}>
+              <Typography variant="h6" color="text.secondary">
+                No posts yet
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Be the first to share something!
+              </Typography>
+            </Box>
+          ) : (
+            /* List of posts */
+            posts.map(post => (
+              <PostCard
+                key={post.id}
+                post={post}
+                onDelete={handlePostDeleted}
+              />
+            ))
+          )}
+        </Box>
+
+        {/* RIGHT SIDEBAR — visible on large+ screens */}
+        <Box
+          sx={{
+            // Hide on small and medium screens
+            display: { xs: 'none', lg: 'block' },
+            width: 280,
+            flexShrink: 0,
+            pr: 2,
+          }}
+        >
+          <RightSidebar />
+        </Box>
+      </Box>
     </Box>
   );
 };

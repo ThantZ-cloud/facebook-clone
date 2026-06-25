@@ -3,6 +3,8 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
+import Profile from './pages/Profile';
+import Friends from './pages/Friends';
 import { Box, CircularProgress } from '@mui/material';
 
 // Protected Route component
@@ -71,6 +73,9 @@ function App() {
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:userId" element={<Profile />} />
+            <Route path="/friends" element={<Friends />} />
           </Route>
 
           {/* Catch all - redirect to home */}

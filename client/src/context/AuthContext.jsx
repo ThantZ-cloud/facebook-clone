@@ -77,9 +77,10 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  // Update user
-  const updateUser = (updatedUser) => {
-    setUser(updatedUser);
+  // Update user — merges partial updates instead of replacing
+  // Example: updateUser({ name: 'New Name' }) keeps all other fields
+  const updateUser = (updatedData) => {
+    setUser(prev => ({ ...prev, ...updatedData }));
   };
 
   return (

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Paper, Box, Avatar, Typography, IconButton, Menu, MenuItem, Chip
 } from '@mui/material';
@@ -13,6 +14,7 @@ import CommentSection from './CommentSection';
 
 const PostCard = ({ post, onDelete }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [liked, setLiked] = useState(post.liked);
   const [likeCount, setLikeCount] = useState(post._count.likes);
   const [commentCount, setCommentCount] = useState(post._count.comments);
@@ -67,12 +69,20 @@ const PostCard = ({ post, onDelete }) => {
   return (
     <Paper elevation={1} sx={{ mb: 2, borderRadius: 2, overflow: 'hidden' }}>
       {/* Post header: avatar, name, timestamp, menu */}
-      <Box sx={{ display: 'flex', alignItems: 'center', p: 2, pb: 0 }}>
-        <Avatar src={post.user.avatar || undefined} sx={{ bgcolor: '#1877F2', mr: 1.5 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', p: 1.5, pb: 0 }}>
+        <Avatar
+          src={post.user.avatar ? `http://localhost:5000${post.user.avatar}` : undefined}
+          sx={{ bgcolor: '#1877F2', mr: 1.5, cursor: 'pointer' }}
+          onClick={() => navigate(`/profile/${post.user.id}`)}
+        >
           {post.user.name.charAt(0).toUpperCase()}
         </Avatar>
         <Box sx={{ flex: 1 }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+          <Typography
+            variant="subtitle2"
+            sx={{ fontWeight: 600, cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
+            onClick={() => navigate(`/profile/${post.user.id}`)}
+          >
             {post.user.name}
           </Typography>
           <Typography variant="caption" color="text.secondary">
@@ -101,7 +111,7 @@ const PostCard = ({ post, onDelete }) => {
 
       {/* Post text content */}
       {post.content && (
-        <Typography variant="body1" sx={{ px: 2, py: 1, whiteSpace: 'pre-wrap' }}>
+        <Typography variant="body1" sx={{ px: 1.5, py: 1, whiteSpace: 'pre-wrap' }}>
           {post.content}
         </Typography>
       )}
@@ -118,7 +128,7 @@ const PostCard = ({ post, onDelete }) => {
       )}
 
       {/* Like and comment counts */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 2, py: 1 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1.5, py: 1 }}>
         {likeCount > 0 && (
           <Chip
             icon={<ThumbUpIcon sx={{ fontSize: 16 }} />}
@@ -141,7 +151,7 @@ const PostCard = ({ post, onDelete }) => {
       </Box>
 
       {/* Action bar: Like + Comment buttons */}
-      <Box sx={{ display: 'flex', borderTop: '1px solid #E0E0E0', mx: 2 }}>
+      <Box sx={{ display: 'flex', borderTop: '1px solid #E0E0E0', mx: 1.5 }}>
         <Box
           onClick={handleLike}
           sx={{
@@ -170,7 +180,7 @@ const PostCard = ({ post, onDelete }) => {
 
       {/* Comment section (expandable) */}
       {showComments && (
-        <Box sx={{ px: 2, pb: 2, pt: 1, borderTop: '1px solid #E0E0E0' }}>
+        <Box sx={{ px: 1.5, pb: 2, pt: 1, borderTop: '1px solid #E0E0E0' }}>
           <CommentSection postId={post.id} onCommentCountChange={handleCommentCountChange} />
         </Box>
       )}

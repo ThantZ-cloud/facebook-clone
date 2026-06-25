@@ -71,8 +71,15 @@ const getPosts = async (req, res) => {
     const limit = parseInt(req.query.limit) || 20;
     const skip = (page - 1) * limit;
 
+    // Optional: filter by userId (for profile page)
+    const userId = req.query.userId ? parseInt(req.query.userId) : undefined;
+
+    // Build the where clause
+    const where = userId ? { userId } : {};
+
     // Fetch posts with user info, counts, and whether current user liked each post
     const posts = await prisma.post.findMany({
+      where,
       skip: skip,
       take: limit,
       orderBy: { createdAt: 'desc' }, // Newest first

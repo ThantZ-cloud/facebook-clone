@@ -43,6 +43,8 @@ const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const { postCommentRouter, commentRouter } = require('./routes/commentRoutes');
 const likeRoutes = require('./routes/likeRoutes');
+const userRoutes = require('./routes/userRoutes');
+const friendRoutes = require('./routes/friendRoutes');
 
 // Use routes
 app.use('/api/auth', authRoutes);
@@ -50,6 +52,8 @@ app.use('/api/posts', postRoutes);           // CRUD for posts
 app.use('/api/posts', postCommentRouter);    // /api/posts/:postId/comments
 app.use('/api/posts', likeRoutes);           // /api/posts/:postId/like
 app.use('/api/comments', commentRouter);     // /api/comments/:id (delete)
+app.use('/api/users', userRoutes);           // User profiles + search
+app.use('/api/friends', friendRoutes);       // Friend requests + friends list
 
 // Health check route
 app.get('/api/health', (req, res) => {
