@@ -1,7 +1,8 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Home from './pages/Home';
 import { Box, CircularProgress } from '@mui/material';
 
 // Protected Route component
@@ -43,22 +44,6 @@ const PublicRoute = ({ children }) => {
 
   return user ? <Navigate to="/" replace /> : children;
 };
-
-// Home Page placeholder
-const Home = () => {
-  const { user, logout } = useAuth();
-
-  return (
-    <Box sx={{ p: 4 }}>
-      <h1>Welcome to Facebook Clone, {user?.name}!</h1>
-      <p>Email: {user?.email}</p>
-      <button onClick={logout}>Logout</button>
-    </Box>
-  );
-};
-
-// Import Outlet for ProtectedRoute
-import { Outlet } from 'react-router-dom';
 
 function App() {
   return (

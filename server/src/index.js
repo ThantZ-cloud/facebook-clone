@@ -40,9 +40,16 @@ app.locals.io = io;
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
+const postRoutes = require('./routes/postRoutes');
+const { postCommentRouter, commentRouter } = require('./routes/commentRoutes');
+const likeRoutes = require('./routes/likeRoutes');
 
 // Use routes
 app.use('/api/auth', authRoutes);
+app.use('/api/posts', postRoutes);           // CRUD for posts
+app.use('/api/posts', postCommentRouter);    // /api/posts/:postId/comments
+app.use('/api/posts', likeRoutes);           // /api/posts/:postId/like
+app.use('/api/comments', commentRouter);     // /api/comments/:id (delete)
 
 // Health check route
 app.get('/api/health', (req, res) => {
